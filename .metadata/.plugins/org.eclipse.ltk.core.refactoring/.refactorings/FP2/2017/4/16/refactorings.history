@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 3 elements to &apos;FinalProject/src/main/java/CrimeType&apos;&#x0A;- Original project: &apos;FP2&apos;&#x0A;- Destination element: &apos;FinalProject/src/main/java/CrimeType&apos;&#x0A;- Original elements:&#x0A;     TheftAnalysis.TheftMapper.java&#x0A;     TheftAnalysis.TheftReducer.java&#x0A;     TheftAnalysis.Theft.java" description="Copy compilation units" destination="=FinalProject/src\/main\/java&lt;CrimeType" element1="/src\/main\/java&lt;TheftAnalysis{TheftMapper.java" element2="/src\/main\/java&lt;TheftAnalysis{TheftReducer.java" element3="/src\/main\/java&lt;TheftAnalysis{Theft.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1492862516453" units="3" version="1.0"/>
+</session>

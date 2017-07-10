@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: BLOGIT
+Implementation-Version: 0.0.3-SNAPSHOT
+Built-By: ankur
+Implementation-Vendor-Id: com.blogit
+Build-Jdk: 1.8.0_112
+Implementation-URL: http://projects.spring.io/spring-boot/blogit/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+

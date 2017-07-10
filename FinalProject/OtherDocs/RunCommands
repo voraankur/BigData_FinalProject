@@ -1,0 +1,45 @@
+hadoop jar /home/ankur/Desktop/ADBMS/FinalProject/target/CrimeType-0.0.1-SNAPSHOT.jar TopTenCrimeLocation.TopTen /FinalProject/Crimes_-_2001_to_present.csv /FinalProject/CrimeLocation_interm /FinalProject/Top10_output
+
+hadoop jar /home/ankur/Desktop/ADBMS/FinalProject/target/CrimeType-0.0.1-SNAPSHOT.jar BinningPattern.PrimaryTypeData /FinalProject/Crimes_-_2001_to_present.csv /FinalProject/PrimaryTypeBinning_output
+
+hadoop jar /home/ankur/Desktop/ADBMS/FinalProject/target/CrimeType-0.0.1-SNAPSHOT.jar Partitioning.YearPartition /FinalProject/Crimes_-_2001_to_present.csv /FinalProject/YearParitioning_output
+
+hadoop jar /home/ankur/Desktop/ADBMS/FinalProject/target/CrimeType-0.0.1-SNAPSHOT.jar SecondarySorting.LocationCrimeCount /FinalProject/Crimes_-_2001_to_present.csv /FinalProject/SecondarySorting_output
+
+hadoop jar /home/ankur/Desktop/ADBMS/FinalProject/target/CrimeType-0.0.1-SNAPSHOT.jar InvertedIndex.InvertedIndexMain /FinalProject/Crimes_-_2001_to_present.csv /FinalProject/InvertedIndex_output
+
+hadoop jar /home/ankur/Desktop/ADBMS/FinalProject/target/CrimeType-0.0.1-SNAPSHOT.jar DistributedCache.DistributedCacheMain /FinalProject/Crimes_-_2001_to_present.csv /FinalProject/DistributedCache_output /FinalProject/HotValuesBloom
+
+hadoop jar /home/ankur/Desktop/ADBMS/FinalProject/target/CrimeType-0.0.1-SNAPSHOT.jar MinMaxSummarization.MaxMinMain /FinalProject/SecondarySorting_output/part-r-00000 /FinalProject/MaxMin_output
+
+hadoop fs -cat /FinalProject/MaxMin_output/part-r-00000
+
+
+hive:
+
+*do not use*
+LOAD DATA INPATH '/FinalProject/Top10_output/part-r-00000' OVERWRITE INTO TABLE crimes_table;
+
+create table crimes (case_number String, date_crime String, street String, type String, location String, street1 String, num_crimes String) COMMENT ‘Crime details’ ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘\t’ LINES TERMINATED BY ‘\n’;
+
+LOAD DATA INPATH '/user/ankur/join-topten/part-r-00000' OVERWRITE INTO TABLE crimes;
+
+LOAD DATA LOCAL INPATH '/home/ankur/Desktop/ADBMS/pig_join' OVERWRITE INTO TABLE crimes;
+
+create table crime_data as select case_number as case_number, date_crime as date_crime, street as street, type as type from crimes;
+
+select * from crimes where type="THEFT"
+
+INSERT OVERWRITE DIRECTORY '/hive/warehouse' select distinct(type) from crimes;
+
+INSERT DIRECTORY '/hive/warehouse' select distinct(street) from crimes;
+
+select street, type, count(type) from crimes group by street, type;
+
+
+hbase:
+create 'crimes','case_number','date_crime','street','type','location','street1','num_crimes'
+
+bin/hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=”\t” -Dimporttsv.bulk.output=hfile_tmp5 Dimporttsv.columns=HBASE_ROW_KEY,cf crimes /user/ankur/join-topten1/part-r-00000
+
+org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=”\t” -Dimporttsv.bulk.output=hfile_tmp5 Dimporttsv.columns=HBASE_ROW_KEY,case_number,date_crime,location,num_crimes,street,street1,type,crimes /user/ankur/join-topten1/part-r-00000
